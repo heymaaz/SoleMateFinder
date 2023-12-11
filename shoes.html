@@ -8,15 +8,23 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        HI
         <div id="app">
-            <span>{{sku_full}}</span>
+            <div class="header">
+                <a href="#default" class="logo">
+                    SoleMateFinder
+                </a>
+                <div class="header-right">
+                    <input type="text" name="" id="">
+                    <button>Search</button>
+              </div>
+            </div>
             <div v-if="items.length > 0" class="product">
                 <img v-if="items[0].image_url" :src="items[0].image_url" alt="Product image" class="product-image">
                 <img v-else src="https://via.placeholder.com/1000" alt="Product image" class="product-image">
                 <div class="product-details">
                     <p style="font-weight: bold;">{{ items[0].brand }}</p>
                     <h1>{{ items[0].full_name }}</h1>
+                    <span>Product SKU: {{sku_full}}</span>
                     <!--variants-->
                     <p>Available variants:</p>
                     <div class="variants-container">
