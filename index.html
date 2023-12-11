@@ -8,19 +8,42 @@
         <title>Search</title>
     </head>
     <body>
-        
         <div id="app">
             <div class="header">
                 <a href="#default" class="logo">
                     {{siteName}}
                 </a>
                 <div class="header-right">
-                    <input type="text" name="" id="">
-                    <button>Search</button>
-              </div>
+                    <input type="text" v-model="searchForm" id="">
+                    <button @click="search">Search</button>
+                </div>
             </div>
-            products
-            display products
+            <div class="search-results-container" v-if="searchQuery">
+                <h1 v-if="searchCount > 0">Search results for "{{searchQuery}}"</h1>
+                <h1 v-else>Search results</h1>
+                <h2 v-if="searchCount > 0">{{searchCount}} results found</h2>
+            </div>
+            <div class="search-results-container" v-else>
+                <h1>Products {{searchCount}}</h1>
+            </div>
+            <div class="products_container" v-if="items.length>0">
+                <div v-for="item in items" class="product_card">
+                    <a :href="hrefValue(item.sku_full)">
+                        <div>
+                            <img v-if="item.image_url" :src="item.image_url">
+                            <img v-else src="https://via.placeholder.com/1000">
+                        </div>
+                        <div>
+                            <!--Details of the shoe -->
+                            <h3 v-text="getName(item.full_name)">{{ item.full_name }}</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div v-else class="no-results-container">
+                <h1>No results found</h1>
+            </div>            
+
             <div class="footer">
                 <p>{{siteName}} © {{year}} | All rights reserved</p>
             </div>
@@ -32,18 +55,64 @@
             data: {
                 siteName: 'SoleMateFinder',
                 year: new Date().getFullYear(),
+                offset: 0,
+                limit: 20,
+                items: [],
+                searchQuery: '',
+                searchForm: '',
+                searchCount: 0,
             },
             computed : {
                 
             },
             created() {
-                
+                this.fetchData();
             },
             watch: {
                 
             },
             methods: {
-                
+                fetchData: function() {
+                fetch('http://localhost:3000/search/?query=' + this.searchQuery)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    this.items = data;
+                    fetch('http://localhost:3000/search/count/?query=' + this.searchQuery)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        this.searchCount = data.count;
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+                },
+                search: function() {
+                    this.searchQuery = this.searchForm;
+                    this.fetchData();
+                },
+                hrefValue: function(sku_base) {
+                    return 'shoes.html?sku_base=' + sku_base;
+                },
+                getName: function(full_name) {
+                    if(full_name.split(' ').length >= 4) 
+                        return full_name.split(' ')[0]+ ' ' + full_name.split(' ')[1] + ' ' + full_name.split(' ')[2]+ ' ' + full_name.split(' ')[3];
+                    return full_name;
+                }
+
             }
         });
     </script>

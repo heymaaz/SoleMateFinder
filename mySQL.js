@@ -108,6 +108,20 @@ app.get('/search/', (req, res) => {
         res.json(results);
     });
 });
+
+app.get('/search/count/', (req, res) => {
+    const query = req.query.query || '';
+    const sql = `SELECT COUNT(*) AS count FROM shoes WHERE UPPER(full_name) LIKE UPPER(?)`;
+    connectionPool.query(sql, [`%${query}%`], (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.json(results[0]);
+    });
+});
+
 app.listen(port, () => {
     console.log(`API server listening at http://localhost:${port}`);
 });
