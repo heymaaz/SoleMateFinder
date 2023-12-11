@@ -11,7 +11,7 @@
         <div id="app">
             <div class="header">
                 <a href="#default" class="logo">
-                    SoleMateFinder
+                    {{siteName}}
                 </a>
                 <div class="header-right">
                     <input type="text" name="" id="">
@@ -40,12 +40,17 @@
                     
                 </div>
             </div>
+            <div class="footer">
+                <p>{{siteName}} © {{year}} | All rights reserved</p>
+            </div>
         </div>
     </body>
     <script>
         const app = new Vue({
             el: '#app',
             data: {
+                siteName: 'SoleMateFinder',
+                year: new Date().getFullYear(),
                 items: [],
                 sku_full: '',
                 variants:[],
@@ -54,6 +59,12 @@
             created() {
                 const urlParams = new URLSearchParams(window.location.search);
                 this.sku_base = urlParams.get('sku_base') || '580456';
+                if(this.sku_base.includes('-')) {
+                    this.sku_full = this.sku_base;
+                    this.sku_base = this.sku_base.split('-')[0];
+                }
+                //wait for sku_base to be set
+                
                 this.fetchData();
             },
             watch: {
@@ -66,10 +77,7 @@
             },
             methods: {
                 fetchData: function() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const sku_base = urlParams.get('sku_base');
-
-                fetch('http://localhost:3000/shoes/' + sku_base)
+                fetch('http://localhost:3000/shoes/' + this.sku_base)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');

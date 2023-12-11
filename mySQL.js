@@ -93,6 +93,18 @@ app.get('/comparisons', (req, res) => {
     });
 });
 
+app.get('/search/:query?', (req, res) => {
+    const query = req.params.query;
+    const sql = `SELECT * FROM shoes WHERE UPPER(full_name) LIKE UPPER('%${query}%') ORDER BY image_url DESC`;
+    connectionPool.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.json(results);
+    });
+});
 app.listen(port, () => {
     console.log(`API server listening at http://localhost:${port}`);
 });

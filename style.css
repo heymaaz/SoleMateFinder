@@ -115,3 +115,12 @@
       float: none;
   }
 }
+.footer {
+  background-color: var(--grey);
+  padding: 10px;
+  text-align: left;
+  color: var(--black);
+  font-size: .8rem;
+  line-height: 25px;
+  border-radius: 4px;
+}

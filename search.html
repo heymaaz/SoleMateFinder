@@ -9,14 +9,28 @@
     </head>
     <body>
         <div id="app">
-            
+            <div class="header">
+                <a href="#default" class="logo">
+                    {{siteName}}
+                </a>
+                <div class="header-right">
+                    <input type="text" name="" id="">
+                    <button>Search</button>
+              </div>
+            </div>
+            products
+            display products
+            <div class="footer">
+                <p>{{siteName}} © {{year}} | All rights reserved</p>
+            </div>
         </div>
     </body>
     <script>
         const app = new Vue({
             el: '#app',
             data: {
-                
+                siteName: 'SoleMateFinder',
+                year: new Date().getFullYear(),
             },
             computed : {
                 
