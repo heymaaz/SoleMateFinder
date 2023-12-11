@@ -93,10 +93,13 @@ app.get('/comparisons', (req, res) => {
     });
 });
 
-app.get('/search/:query?', (req, res) => {
-    const query = req.params.query;
-    const sql = `SELECT * FROM shoes WHERE UPPER(full_name) LIKE UPPER('%${query}%') ORDER BY image_url DESC`;
-    connectionPool.query(sql, (err, results) => {
+app.get('/search/', (req, res) => {
+    const query = req.query.query || '';
+    const offset = Number(req.query.offset) || 0;
+    const limit = Number(req.query.limit) || 20;
+
+    const sql = `SELECT * FROM shoes WHERE UPPER(full_name) LIKE UPPER(?) ORDER BY image_url DESC LIMIT ? OFFSET ?`;
+    connectionPool.query(sql, [`%${query}%`, limit, offset], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).json({ error: 'Internal server error' });

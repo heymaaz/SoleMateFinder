@@ -19,10 +19,7 @@
   width: 40%;
   padding: 10px;
 }
-.product-details {
-}
 .product-image {
-  object-fit: cover;
 }
 
 .BuyNowButton, .VariantsButton {
@@ -124,3 +121,49 @@
   line-height: 25px;
   border-radius: 4px;
 }
+.product_card {
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  align-items: center;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 20%;
+}
+
+.product_card img {
+  max-width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Apply hover effects to the whole card */
+.product_card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
+}
+
+/* Specific styles for h2 and h5 without transformation */
+.product_card h3, .product_card h5 {
+  margin: 5px 0;
+}
+.products_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Or use 'space-around' */
+  gap: 20px; /* Adjust the gap as needed */
+}
+.product_card a {
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Ensures the link uses the text color of its parent */
+}
+.product_card a:hover {
+  text-decoration: underline; /* Adds underline on hover */
+}
+
