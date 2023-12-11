@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    HI
+    <div id="app">
+        <span>{{sku_full}}</span>
+        <div v-if="items.length > 0" class="product">
+            <img v-if="items[0].image_url" :src="items[0].image_url" alt="Product image" class="product-image">
+            <img v-else src="https://via.placeholder.com/1000" alt="Product image" class="product-image">
+            <div class="product-details">
+                <p style="font-weight: bold;">{{ items[0].brand }}</p>
+                <h1>{{ items[0].full_name }}</h1>
+                <!--variants-->
+                <p>Available variants:</p>
+                <div class="variants-container">
+                    <button class="VariantsButton" v-for="variant in variants" :key="variant.sku_full" @click="setSkuFull(variant.sku_full)">{{variant.full_name}}</button>
+                </div>
+                <br><br>
+                <!--Buy options-->
+                <div v-for="item in items" :key="item.id">
+                    <a :href="item.website_url" target="_blank">
+                        <button class="BuyNowButton">Buy for {{ item.selling_price }} at {{ getWebsiteName(item.website_url) }}</button>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    
+  
+  <script>
+        const app = new Vue({
+        el: '#app',
+        data: {
+            items: [],
+            sku_full: '',
+            variants:[],
+            sku_base: '580456'
+        },
+        created() {
+            const urlParams = new URLSearchParams(window.location.search);
+            this.sku_base = urlParams.get('sku_base') || '580456';
+            this.fetchData();
+        },
+        watch: {
+            sku_full: function() {
+                this.fetchData();
+            },
+            sku_base: function() {
+                this.fetchData();
+            }
+        },
+        methods: {
+            fetchData: function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sku_base = urlParams.get('sku_base');
+
+            fetch('http://localhost:3000/shoes/' + sku_base)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.variants = data;
+                if(!this.sku_full) this.sku_full = this.variants[0].sku_full;
+
+                fetch('http://localhost:3000/shoes/' + this.sku_full)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    this.items = data;
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+            },
+            getWebsiteName(url) {
+            const domain = new URL(url).hostname;
+            const websiteNames = {
+                'www.unisportstore.com': 'Uni Sports Store',
+                'www.prodirectsport.com': 'Pro Direct Sport',
+                'www.ultrafootball.com': 'Ultra Football',
+                'www.foot-store.com' : 'Foot Store',
+                'www.nike.com': 'Nike'
+            };
+            return websiteNames[domain] || domain;
+            },
+            setSkuFull(sku_full) {
+                this.sku_full = sku_full;
+            }
+        }
+    });
+  </script>
