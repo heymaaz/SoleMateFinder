@@ -81,6 +81,7 @@ app.get('/shoes/:id?', (req, res) => {
     }
 });
 
+
 app.get('/comparisons', (req, res) => {
     const sql = 'SELECT * FROM comparison';
     connectionPool.query(sql, (err, results) => {
@@ -128,3 +129,4 @@ app.listen(port, () => {
 
 
 
+module.exports = app;
