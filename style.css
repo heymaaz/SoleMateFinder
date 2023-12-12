@@ -19,8 +19,6 @@
   width: 40%;
   padding: 10px;
 }
-.product-image {
-}
 
 .BuyNowButton, .VariantsButton {
   background-color: var(--green);
@@ -79,6 +77,7 @@
 .header-right {
   display: flex;
   justify-content: space-between;
+  float: right;
 }
 
 .header-right input {
@@ -159,15 +158,15 @@
   transform: scale(1.03);
 }
 
-/* Specific styles for h2 and h5 without transformation */
+/* Specific styles for h3 and h5 without transformation */
 .product_card h3, .product_card h5 {
   margin: 5px 0;
 }
 .products_container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; /* Or use 'space-around' */
-  gap: 20px; /* Adjust the gap as needed */
+  justify-content: space-around; 
+  gap: 20px; 
 }
 .product_card a {
   text-decoration: none; /* Removes underline */
@@ -181,13 +180,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh; /* Adjust as needed */
+  height: 80vh;
   text-align: center;
 }
 
 .no-results-container h1 {
   font-size: 2rem;
-  color: #333; /* Or any color that fits your design */
+  color: --black;
   margin: 0;
   padding: 20px;
 }
@@ -204,13 +203,16 @@
   border: 1px solid var(--black);
   background-color: var(--dodgerblue);
   color: var(--white);
-  border-radius: 40px;
   text-decoration: none;
   font-size: 1.5rem;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 .pagination button:hover{
   background-color: var(--blue);
   color: var(--white);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
 }
 .pagination button:active{
   background-color: var(--dark-blue);
@@ -219,5 +221,7 @@
 .pagination button:disabled{
   background-color: var(--grey);
   color: var(--black);
+  box-shadow: none;
+  transform: none;
 }
 

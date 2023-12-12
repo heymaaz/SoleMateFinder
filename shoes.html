@@ -14,9 +14,10 @@
                     {{siteName}}
                 </a>
                 <div class="header-right">
-                    <input type="text" v-model="searchForm" id="">
-                    <button @click="search">Search</button>
-              </div>
+                    <form @submit.prevent="search">
+                        <input type="text" v-model="searchForm" id="searchForm" placeholder="Find your SoleMate">
+                    </form>
+                </div>
             </div>
             <div v-if="items.length > 0" class="product">
                 <img v-if="items[0].image_url" :src="items[0].image_url" alt="Product image" class="product-image">
