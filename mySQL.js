@@ -48,7 +48,7 @@ app.get('/shoes/:id?', (req, res) => {
 
     if (shoeId) {
         if(shoeId.toString().includes('-')){
-            sql = `SELECT * FROM shoes, shoe_model, comparison WHERE shoes.sku_base = shoe_model.sku_base AND shoes.sku_full = comparison.sku_full AND shoes.sku_full = ?`;
+            sql = `SELECT * FROM shoes, shoe_model, comparison WHERE shoes.sku_base = shoe_model.sku_base AND shoes.sku_full = comparison.sku_full AND shoes.sku_full = ? ORDER BY CASE WHEN image_url LIKE 'https://s%' THEN 1 WHEN image_url LIKE 'https://im%' THEN 2 WHEN image_url LIKE 'https://t%' THEN 3 ELSE 4 END ASC`;
             connectionPool.query(sql, [shoeId], (err, results) => {
                 if (err) {
                     console.error('Error executing query:', err);
@@ -58,7 +58,7 @@ app.get('/shoes/:id?', (req, res) => {
                 res.json(results);
             });
         }else{
-            sql = `SELECT * FROM shoes WHERE sku_base = ?`;
+            sql = `SELECT * FROM shoes WHERE sku_base = ? ORDER BY CASE WHEN image_url LIKE 'https://s%' THEN 1 WHEN image_url LIKE 'https://im%' THEN 2 WHEN image_url LIKE 'https://t%' THEN 3 ELSE 4 END ASC`;
             connectionPool.query(sql, [shoeId], (err, results) => {
                 if (err) {
                     console.error('Error executing query:', err);
@@ -98,7 +98,7 @@ app.get('/search/', (req, res) => {
     const offset = Number(req.query.offset) || 0;
     const limit = Number(req.query.limit) || 20;
 
-    const sql = `SELECT * FROM shoes WHERE UPPER(full_name) LIKE UPPER(?) ORDER BY image_url DESC LIMIT ? OFFSET ?`;
+    const sql = `SELECT * FROM shoes WHERE UPPER(full_name) LIKE UPPER(?) ORDER BY CASE WHEN image_url LIKE 'https://s%' THEN 1 WHEN image_url LIKE 'https://im%' THEN 2 WHEN image_url LIKE 'https://t%' THEN 3 ELSE 4 END ASC LIMIT ? OFFSET ?`;
     connectionPool.query(sql, [`%${query}%`, limit, offset], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);

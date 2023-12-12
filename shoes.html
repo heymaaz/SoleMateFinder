@@ -40,6 +40,9 @@
                     
                 </div>
             </div>
+            <div v-else class="no-results-container">
+                <h1>No item found</h1>
+            </div> 
             <div class="footer">
                 <p>{{siteName}} © {{year}} | All rights reserved</p>
             </div>
@@ -59,14 +62,11 @@
             },
             created() {
                 const urlParams = new URLSearchParams(window.location.search);
-                this.sku_base = urlParams.get('sku_base') || '580456';
+                this.sku_base = urlParams.get('sku_base') || 'fd1165';
                 if(this.sku_base.includes('-')) {
                     this.sku_full = this.sku_base;
                     this.sku_base = this.sku_base.split('-')[0];
                 }
-                //wait for sku_base to be set
-                
-                this.fetchData();
             },
             watch: {
                 sku_full: function() {
@@ -87,7 +87,15 @@
                 })
                 .then(data => {
                     this.variants = data;
-                    if(!this.sku_full) this.sku_full = this.variants[0].sku_full;
+                    var invalidSkuFull = true;
+                    for(var i = 0; i < this.variants.length; i++) {
+                        if(this.variants[i].sku_full == this.sku_full) {
+                            invalidSkuFull = false;
+                            break;
+                        }
+                    }
+                    if(invalidSkuFull)  this.sku_full = this.variants[0].sku_full;
+                    
 
                     fetch('http://localhost:3000/shoes/' + this.sku_full)
                     .then(response => {
