@@ -122,11 +122,23 @@ app.get('/search/count/', (req, res) => {
         res.json(results[0]);
     });
 });
-
+/*
 app.listen(port, () => {
     console.log(`API server listening at http://localhost:${port}`);
 });
-
-
-
-module.exports = app;
+*/
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => {
+        console.log(`API server listening at http://localhost:${port}`);
+    });
+}
+//close database connection
+function closeDatabaseConnection() {
+    return new Promise((resolve, reject) => {
+        connectionPool.end(err => {
+            if (err) return reject(err);
+            resolve();
+        });
+    });
+}
+module.exports = { app, closeDatabaseConnection };

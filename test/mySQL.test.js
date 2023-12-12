@@ -1,7 +1,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const { describe, it, before, after } = require('mocha');
-const app = require('../mySQL');
+//const app = require('../mySQL');
+const { app, closeDatabaseConnection } = require('../mySQL');
 const e = require('express');
 
 chai.use(chaiHttp);
@@ -13,7 +14,15 @@ describe('API Tests', () => {
     });
 
     after(() => {
-        // Clean up any test data or environment
+        // Close any Database connections
+        after((done) => {
+            closeDatabaseConnection()
+                .then(() => done())
+                .catch(err => {
+                    console.error('Error closing the database connection:', err);
+                    done(err);
+                });
+        });
     });
 
     describe('GET /shoe_models/', () => {
@@ -40,6 +49,7 @@ describe('API Tests', () => {
                     done();
                 });
         });
+        
     });
 
     describe('GET /search/count/', () => {
@@ -66,13 +76,14 @@ describe('API Tests', () => {
     });
 
     describe('GET /search/', () => {
-        it('should return all shoes if no query is provided', (done) => {
+        it('should return with 20 shoes if no query is provided. Default pagination limit is 20', (done) => {
             chai
                 .request(app)
                 .get('/search/')
                 .end((err, res) => {
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an('array');
+                    expect(res.body.length).to.equal(20);
                     done();
                 });
         });
