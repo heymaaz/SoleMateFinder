@@ -10,7 +10,7 @@
     <body>
         <div id="app">
             <div class="header">
-                <a href="#default" class="logo">
+                <a href="index.html" class="logo">
                     {{siteName}}
                 </a>
                 <div class="header-right">
@@ -20,11 +20,10 @@
             </div>
             <div class="search-results-container" v-if="searchQuery">
                 <h1 v-if="searchCount > 0">Search results for "{{searchQuery}}"</h1>
-                <h1 v-else>Search results</h1>
-                <h2 v-if="searchCount > 0">{{searchCount}} results found</h2>
+                <h1 v-else-if="items.length>0">Search results</h1>
             </div>
-            <div class="search-results-container" v-else>
-                <h1>Products {{searchCount}}</h1>
+            <div class="search-results-container">
+                <h3 v-if="items.length>0">Showing {{offset+1}}-{{offset+limit}} of {{searchCount}} Products</h3>
             </div>
             <div class="products_container" v-if="items.length>0">
                 <div v-for="item in items" class="product_card">
@@ -42,7 +41,15 @@
             </div>
             <div v-else class="no-results-container">
                 <h1>No results found</h1>
-            </div>            
+            </div> 
+            <div class="pagination" v-if="items.length>0">
+                <button v-if="offset>0" @click="Previous()">Previous</button>
+                <button v-else disabled>Previous</button>
+                <span>Page {{currentPage}} of {{maxPages}}</span>
+                <button v-if="offset+limit<searchCount" @click="Next()">Next</button>
+                <button v-else disabled>Next</button>
+
+            </div>
 
             <div class="footer">
                 <p>{{siteName}} © {{year}} | All rights reserved</p>
@@ -63,9 +70,16 @@
                 searchCount: 0,
             },
             computed : {
-                
+                currentPage: function() {
+                    return this.offset/this.limit + 1;
+                },
+                maxPages: function() {
+                    return Math.ceil(this.searchCount/this.limit);
+                }
             },
             created() {
+                const urlParams = new URLSearchParams(window.location.search);
+                this.searchQuery = urlParams.get('searchQuery') || '';
                 this.fetchData();
             },
             watch: {
@@ -73,7 +87,7 @@
             },
             methods: {
                 fetchData: function() {
-                fetch('http://localhost:3000/search/?query=' + this.searchQuery)
+                fetch('http://localhost:3000/search/?query=' + this.searchQuery+'&offset='+this.offset+'&limit='+this.limit)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -101,8 +115,7 @@
                 });
                 },
                 search: function() {
-                    this.searchQuery = this.searchForm;
-                    this.fetchData();
+                    window.location.href = 'index.html?searchQuery=' + this.searchForm;
                 },
                 hrefValue: function(sku_base) {
                     return 'shoes.html?sku_base=' + sku_base;
@@ -111,6 +124,14 @@
                     if(full_name.split(' ').length >= 4) 
                         return full_name.split(' ')[0]+ ' ' + full_name.split(' ')[1] + ' ' + full_name.split(' ')[2]+ ' ' + full_name.split(' ')[3];
                     return full_name;
+                },
+                Next: function() {
+                    this.offset += this.limit;
+                    this.fetchData();
+                },
+                Previous: function() {
+                    this.offset -= this.limit;
+                    this.fetchData();
                 }
 
             }

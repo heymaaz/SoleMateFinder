@@ -10,12 +10,12 @@
     <body>
         <div id="app">
             <div class="header">
-                <a href="#default" class="logo">
+                <a href="index.html" class="logo">
                     {{siteName}}
                 </a>
                 <div class="header-right">
-                    <input type="text" name="" id="">
-                    <button>Search</button>
+                    <input type="text" v-model="searchForm" id="">
+                    <button @click="search">Search</button>
               </div>
             </div>
             <div v-if="items.length > 0" class="product">
@@ -55,6 +55,7 @@
                 sku_full: '',
                 variants:[],
                 sku_base: '',
+                searchForm: '',
             },
             created() {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -119,6 +120,9 @@
                 },
                 setSkuFull(sku_full) {
                     this.sku_full = sku_full;
+                },
+                search: function() {
+                    window.location.href = 'index.html?searchQuery=' + this.searchForm;
                 }
             }
         });
