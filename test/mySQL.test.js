@@ -14,7 +14,7 @@ describe('API Tests', () => {
     });
 
     after(() => {
-        // Close any Database connections
+        // Close Database connections
         after((done) => {
             closeDatabaseConnection()
                 .then(() => done())
@@ -24,7 +24,7 @@ describe('API Tests', () => {
                 });
         });
     });
-
+/*
     describe('GET /shoe_models/', () => {
         it('should return all shoe models if no id is provided', (done) => {
             chai
@@ -45,7 +45,32 @@ describe('API Tests', () => {
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an('array');
                     expect(res.body[0].sku_base).to.equal('dj5625');
-                    // Add more assertions as needed
+                    done();
+                });
+        });
+        
+    });
+*/
+    describe('GET /shoes/', () => {
+        it('should return all shoes if no id is provided', (done) => {
+            chai
+                .request(app)
+                .get('/shoes/')
+                .end((err, res) => {
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an('array');
+                    done();
+                });
+        });
+
+        it('should return a specific shoe if id is provided', (done) => {
+            chai
+                .request(app)
+                .get('/shoes/dj5625')
+                .end((err, res) => {
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an('array');
+                    expect(res.body[0].sku_base).to.equal('dj5625');
                     done();
                 });
         });

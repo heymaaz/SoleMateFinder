@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SoleMateFinder</title>
+        <title>SoleMate Finder</title>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -29,7 +29,18 @@
                     <!--variants-->
                     <p>Available variants:</p>
                     <div class="variants-container">
+                        <button 
+                            class="VariantsButton" 
+                            v-for="variant in variants" 
+                            :key="variant.sku_full" 
+                            :class="{ 'selected-variant': variant.sku_full == sku_full }" 
+                            @click="setSkuFull(variant.sku_full)"
+                        >
+                            {{ variant.full_name }}
+                        </button>
+                        <!--
                         <button class="VariantsButton" v-for="variant in variants" :key="variant.sku_full" @click="setSkuFull(variant.sku_full)">{{variant.full_name}}</button>
+                        -->
                     </div>
                     <br><br>
                     <!--Buy options-->
@@ -53,7 +64,7 @@
         const app = new Vue({
             el: '#app',
             data: {
-                siteName: 'SoleMateFinder',
+                siteName: 'SoleMate Finder',
                 year: new Date().getFullYear(),
                 items: [],
                 sku_full: '',

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <title>SoleMateFinder</title>
+        <title>SoleMate Finder</title>
     </head>
     <body>
         <div id="app">
@@ -63,7 +63,7 @@
         const app = new Vue({
             el: '#app',
             data: {
-                siteName: 'SoleMateFinder',
+                siteName: 'SoleMate Finder',
                 year: new Date().getFullYear(),
                 offset: 0,
                 limit: 20,
@@ -83,6 +83,7 @@
             created() {
                 const urlParams = new URLSearchParams(window.location.search);
                 this.searchQuery = urlParams.get('searchQuery') || '';
+                this.searchForm = this.searchQuery;
                 this.fetchData();
             },
             watch: {
@@ -120,8 +121,8 @@
                 search: function() {
                     window.location.href = 'index.html?searchQuery=' + this.searchForm;
                 },
-                hrefValue: function(sku_base) {
-                    return 'shoes.html?sku_base=' + sku_base;
+                hrefValue: function(sku) {
+                    return 'shoes.html?sku_base=' + sku;
                 },
                 getName: function(full_name) {
                     if(full_name.split(' ').length >= 4) 

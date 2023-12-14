@@ -15,7 +15,7 @@ const connectionPool = mysql.createPool({
     password: 'maazdubai',
     database: 'solemate_finder'
 });
-
+/*
 app.get('/shoe_models/:id?', (req, res) => {
     const shoeModelsId = req.params.id;
     let sql;
@@ -42,6 +42,7 @@ app.get('/shoe_models/:id?', (req, res) => {
         });
     }
 });
+*/
 app.get('/shoes/:id?', (req, res) => {
     const shoeId = req.params.id;
     let sql;
@@ -122,11 +123,7 @@ app.get('/search/count/', (req, res) => {
         res.json(results[0]);
     });
 });
-/*
-app.listen(port, () => {
-    console.log(`API server listening at http://localhost:${port}`);
-});
-*/
+
 if (process.env.NODE_ENV !== 'test') {
     app.listen(port, () => {
         console.log(`API server listening at http://localhost:${port}`);

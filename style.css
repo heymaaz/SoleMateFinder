@@ -30,7 +30,6 @@
   display: inline-block;
   margin: 4px 2px;
   cursor: pointer;
-  transition-duration: 0.4s;
   font-size: .8rem;
   border-radius: 40px;
 }
@@ -50,6 +49,11 @@
 
 .VariantsButton:hover {
   background-color: var(--dark-blue);
+}
+
+.selected-variant {
+  background-color: var(--dodgerblue);
+  transition-duration: 0s;
 }
 
 .header {
