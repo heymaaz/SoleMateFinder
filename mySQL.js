@@ -10,9 +10,9 @@ const port = 3000;
 const connectionPool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
-    port: 3307,
+    port: 3306,
     user: 'root',
-    password: 'Maazmysql#1',
+    password: 'maazdubai',
     database: 'solemate_finder'
 });
 
