@@ -3,37 +3,35 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <link rel="stylesheet" href="style.css"><!--CSS-->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script><!--Vue.js-->
         <title>SoleMate Finder</title>
     </head>
     <body>
         <div id="app">
-            <div class="header">
+            <div class="header"><!--Header-->
                 <a href="index.html" class="logo">
-                    {{siteName}}
+                    {{siteName}}<!--SoleMate Finder-->
                 </a>
-                <div class="header-right">
-                    <form @submit.prevent="search">
+                <div class="header-right"><!--Search-->
+                    <form @submit.prevent="search"><!--Search-->
                         <input type="text" v-model="searchForm" id="searchForm" placeholder="Find your SoleMate">
-                        <!--<input type="text" v-model="searchForm" id="searchForm">
-                        <button @click="search">Search</button>-->
                     </form>
                 </div>
             </div>
-            <div class="search-results-container" v-if="searchQuery">
-                <h1 v-if="searchCount > 0">Search results for "{{searchQuery}}"</h1>
+            <div class="search-results-container" v-if="searchQuery"><!--Search results-->
+                <h1 v-if="searchCount > 0">Search results for "{{searchQuery}}"</h1><!--Search results for "searchQuery"-->
                 <h1 v-else-if="items.length>0">Search results</h1>
             </div>
             <div class="search-results-container">
-                <h3 v-if="items.length>0">Showing {{offset+1}}-{{offset+limit}} of {{searchCount}} Products</h3>
+                <h3 v-if="items.length>0">Showing {{offset+1}}-{{offset+limit}} of {{searchCount}} Products</h3><!--Pagination for eg. Showing 1-20 of 100 Products-->
             </div>
-            <div class="products_container" v-if="items.length>0">
-                <div v-for="item in items" class="product_card">
-                    <a :href="hrefValue(item.sku_full)">
+            <div class="products_container" v-if="items.length>0"><!--If number of products is more than 0-->
+                <div v-for="item in items" class="product_card"><!--For each item in items-->
+                    <a :href="hrefValue(item.sku_full)"><!--Link to shoes.html for the item-->
                         <div>
-                            <img v-if="item.image_url" :src="item.image_url">
-                            <img v-else src="https://via.placeholder.com/1000">
+                            <img v-if="item.image_url" :src="item.image_url"><!--Image of the shoe-->
+                            <img v-else src="https://via.placeholder.com/1000"><!--Placeholder image if the image doesn't exists-->
                         </div>
                         <div>
                             <!--Details of the shoe -->
@@ -42,20 +40,20 @@
                     </a>
                 </div>
             </div>
-            <div v-else class="no-results-container">
+            <div v-else class="no-results-container"><!--If number of products is 0-->
                 <h1>No results found</h1>
             </div> 
-            <div class="pagination" v-if="items.length>0">
-                <button v-if="offset>0" @click="Previous()">Previous</button>
-                <button v-else disabled>Previous</button>
-                <span>Page {{currentPage}} of {{maxPages}}</span>
-                <button v-if="offset+limit<searchCount" @click="Next()">Next</button>
-                <button v-else disabled>Next</button>
+            <div class="pagination" v-if="items.length>0"><!--Pagination Buttons-->
+                <button v-if="offset>0" @click="Previous()">Previous</button><!--Previous button-->
+                <button v-else disabled>Previous</button><!--Disabled previous button if offset is 0-->
+                <span>Page {{currentPage}} of {{maxPages}}</span><!--Page number -->
+                <button v-if="offset+limit<searchCount" @click="Next()">Next</button><!--Next button-->
+                <button v-else disabled>Next</button><!--Disabled next button if offset+limit is greater than searchCount-->
 
             </div>
 
             <div class="footer">
-                <p>{{siteName}} © {{year}} | All rights reserved</p>
+                <p>{{siteName}} © {{year}} | All rights reserved</p><!--Footer-->
             </div>
         </div>
     </body>
@@ -64,33 +62,33 @@
             el: '#app',
             data: {
                 siteName: 'SoleMate Finder',
-                year: new Date().getFullYear(),
-                offset: 0,
-                limit: 20,
+                year: new Date().getFullYear(),//Current year
+                offset: 0,//Pagination offset
+                limit: 20,//Pagination limit
                 items: [],
                 searchQuery: '',
                 searchForm: '',
-                searchCount: 0,
+                searchCount: 0,//Number of products
             },
             computed : {
                 currentPage: function() {
-                    return this.offset/this.limit + 1;
+                    return this.offset/this.limit + 1;//Current page number
                 },
                 maxPages: function() {
-                    return Math.ceil(this.searchCount/this.limit);
+                    return Math.ceil(this.searchCount/this.limit);//Maximum number of pages
                 }
             },
             created() {
-                const urlParams = new URLSearchParams(window.location.search);
-                this.searchQuery = urlParams.get('searchQuery') || '';
-                this.searchForm = this.searchQuery;
-                this.fetchData();
+                const urlParams = new URLSearchParams(window.location.search);//Get searchQuery from URL
+                this.searchQuery = urlParams.get('searchQuery') || '';//If searchQuery is not present, set it to empty string
+                this.searchForm = this.searchQuery;//Set searchForm to searchQuery to show it in the search bar
+                this.fetchData();//Fetch data
             },
             watch: {
                 
             },
             methods: {
-                fetchData: function() {
+                fetchData: function() {//Fetch data from API using searchQuery, offset and limit
                 fetch('http://localhost:3000/search/?query=' + this.searchQuery+'&offset='+this.offset+'&limit='+this.limit)
                 .then(response => {
                     if (!response.ok) {
@@ -122,20 +120,20 @@
                     window.location.href = 'index.html?searchQuery=' + this.searchForm;
                 },
                 hrefValue: function(sku) {
-                    return 'shoes.html?sku_base=' + sku;
+                    return 'shoes.html?sku_base=' + sku;//Link to shoes.html for the item
                 },
                 getName: function(full_name) {
-                    if(full_name.split(' ').length >= 4) 
-                        return full_name.split(' ')[0]+ ' ' + full_name.split(' ')[1] + ' ' + full_name.split(' ')[2]+ ' ' + full_name.split(' ')[3];
-                    return full_name;
+                    if(full_name.split(' ').length >= 4) //If full_name has more than 4 words
+                        return full_name.split(' ')[0]+ ' ' + full_name.split(' ')[1] + ' ' + full_name.split(' ')[2]+ ' ' + full_name.split(' ')[3];//Return first 4 words
+                    return full_name;//Else return full_name
                 },
                 Next: function() {
-                    this.offset += this.limit;
-                    this.fetchData();
+                    this.offset += this.limit;//Increment offset by limit
+                    this.fetchData();//Fetch data
                 },
                 Previous: function() {
-                    this.offset -= this.limit;
-                    this.fetchData();
+                    this.offset -= this.limit;//Decrement offset by limit
+                    this.fetchData();//Fetch data
                 }
 
             }
