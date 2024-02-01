@@ -5,13 +5,12 @@ const cors = require('cors');//import cors to allow cross origin requests from t
 const app = express();//create express app instance
 
 app.use(cors());//use cors middleware to allow cross origin requests from the browser
-const port = 3000;//set port to 3000
 
 const connectionPool = mysql.createPool({//create mysql connection pool to connect to the database with the following credentials
     connectionLimit: 10,
-    host: 'localhost',
+    host: 'my-database-1.cjs0kwoyaxuf.eu-west-2.rds.amazonaws.com',//'localhost',
     port: 3306,
-    user: 'root',
+    user: 'admin',//'root',
     password: 'maazdubai',
     database: 'solemate_finder'
 });
@@ -100,6 +99,8 @@ app.get('/search/count/', (req, res) => {//get request to /search/count/
     });
 });
 
+//Start the server
+const port = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'test') {//if not in test environment
     app.listen(port, () => {//start server
         console.log(`API server listening at http://localhost:${port}`);//log message to console
