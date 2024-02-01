@@ -27,7 +27,7 @@
                 <h3 v-if="items.length>0">Showing {{offset+1}}-{{offset+limit}} of {{searchCount}} Products</h3><!--Pagination for eg. Showing 1-20 of 100 Products-->
             </div>
             <div v-if="items.length==0 && !searchQuery">
-                <p>If you're opening this for the first time, the products won't load because of https certificate is self-signed click
+                <p>If you're opening this for the first time, the products won't load because the https certificate is self-signed. Click
                     <a href="https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/search/" target="_blank">
                         here
                     </a> 
