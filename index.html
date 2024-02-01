@@ -26,13 +26,6 @@
             <div class="search-results-container">
                 <h3 v-if="items.length>0">Showing {{offset+1}}-{{offset+limit}} of {{searchCount}} Products</h3><!--Pagination for eg. Showing 1-20 of 100 Products-->
             </div>
-            <div v-if="items.length==0 && !searchQuery">
-                <p>If you're opening this for the first time, the products won't load because the https certificate is self-signed. Click
-                    <a href="https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/search/" target="_blank">
-                        here
-                    </a> 
-                    and tell the browser yes you want to visit the site to load the products</p>
-            </div>
             <div class="products_container" v-if="items.length>0"><!--If number of products is more than 0-->
                 <div v-for="item in items" class="product_card"><!--For each item in items-->
                     <a :href="hrefValue(item.sku_full)"><!--Link to shoes.html for the item-->
