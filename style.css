@@ -140,6 +140,12 @@
   .product-image, .product-details {
     width: 90%;
   }
+  .products_container {
+    gap: 5%;
+  }
+  .product_card {
+    width: 90%;
+  }
 }
 
 .footer {
