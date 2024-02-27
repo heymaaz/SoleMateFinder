@@ -1,4 +1,4 @@
-:root {
+:root {/* CSS variables */
   --green: #4CAF50;
   --dark-green: #45a049;
   --blue: #008CBA;
@@ -10,7 +10,7 @@
   --dodgerblue: dodgerblue;
 }
 
-.product, .variants-container {
+.product, .variants-container {/* CSS Grid */
   display: flex;
   flex-wrap: wrap;
 }
@@ -30,7 +30,6 @@
   display: inline-block;
   margin: 4px 2px;
   cursor: pointer;
-  transition-duration: 0.4s;
   font-size: .8rem;
   border-radius: 40px;
 }
@@ -50,6 +49,11 @@
 
 .VariantsButton:hover {
   background-color: var(--dark-blue);
+}
+
+.selected-variant {
+  background-color: var(--dodgerblue);
+  transition-duration: 0s;
 }
 
 .header {
@@ -110,16 +114,6 @@
   color: var(--white);
 }
 
-@media screen and (max-width: 500px) {
-  .header a {
-      float: none;
-      display: block;
-      text-align: left;
-  }
-  .header-right {
-      float: none;
-  }
-}
 
 .footer {
   background-color: var(--grey);
@@ -225,3 +219,38 @@
   transform: none;
 }
 
+
+@media screen and (max-width: 500px) {
+  .header{
+    justify-content: center;
+  }
+  .header a.logo {
+      float: none;
+      display: block;
+      text-align: left;
+      width: 100%;
+      text-align: center;
+      font-size: 2.5rem;
+      padding: 0 0 15px 0;
+  }
+  .header-right{
+      align-items: center;
+      float: none;
+      width: 100%;
+      display: flex;
+      justify-content: center; /* Added this line */
+  }
+  .product{
+    flex-direction: column;
+  }
+  .product-image, .product-details {
+    width: 90%;
+  }
+  .product_card {
+    width: 90%;
+  }
+  .pagination button{
+    width: 120px;
+    font-size: 1rem;
+  }
+}

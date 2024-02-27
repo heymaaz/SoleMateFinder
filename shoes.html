@@ -3,65 +3,73 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <link rel="stylesheet" href="style.css">
+        <title>SoleMate Finder</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script><!--Vue.js-->
+        <link rel="stylesheet" href="style.css"><!--CSS-->
     </head>
     <body>
         <div id="app">
             <div class="header">
                 <a href="index.html" class="logo">
-                    {{siteName}}
+                    {{siteName}}<!--SoleMate Finder-->
                 </a>
                 <div class="header-right">
                     <form @submit.prevent="search">
-                        <input type="text" v-model="searchForm" id="searchForm" placeholder="Find your SoleMate">
+                        <input type="text" v-model="searchForm" id="searchForm" placeholder="Find your SoleMate"><!--Search-->
                     </form>
                 </div>
             </div>
-            <div v-if="items.length > 0" class="product">
-                <img v-if="items[0].image_url" :src="items[0].image_url" alt="Product image" class="product-image">
-                <img v-else src="https://via.placeholder.com/1000" alt="Product image" class="product-image">
-                <div class="product-details">
-                    <p style="font-weight: bold;">{{ items[0].brand }}</p>
-                    <h1>{{ items[0].full_name }}</h1>
-                    <span>Product SKU: {{sku_full}}</span>
+            <div v-if="items.length > 0" class="product"><!--If number of products is more than 0-->
+                <img v-if="items[0].image_url" :src="items[0].image_url" alt="Product image" class="product-image"><!--If image_url exists-->
+                <img v-else src="https://via.placeholder.com/1000" alt="Product image" class="product-image"><!--If image_url does not exist-->
+                <div class="product-details"><!--Product details-->
+                    <p style="font-weight: bold;">{{ items[0].brand }}</p><!--Brand-->
+                    <h1>{{ items[0].full_name }}</h1><!--Full name-->
+                    <span>Product SKU: {{sku_full}}</span><!--SKU-->
                     <!--variants-->
-                    <p>Available variants:</p>
-                    <div class="variants-container">
-                        <button class="VariantsButton" v-for="variant in variants" :key="variant.sku_full" @click="setSkuFull(variant.sku_full)">{{variant.full_name}}</button>
+                    <p>Available variants:</p><!--Available variants-->
+                    <div class="variants-container"><!--Variants container-->
+                        <button 
+                            class="VariantsButton" 
+                            v-for="variant in variants" 
+                            :key="variant.sku_full" 
+                            :class="{ 'selected-variant': variant.sku_full == sku_full }" 
+                            @click="setSkuFull(variant.sku_full)"
+                        ><!--Variant button-->
+                            {{ variant.full_name }}<!--Variant name-->
+                        </button>
                     </div>
                     <br><br>
                     <!--Buy options-->
-                    <div v-for="item in items" :key="item.id">
-                        <a :href="item.website_url" target="_blank">
-                            <button class="BuyNowButton">Buy for {{ item.selling_price }} at {{ getWebsiteName(item.website_url) }}</button>
+                    <div v-for="item in items" :key="item.id"><!--For each item in items-->
+                        <a :href="item.website_url" target="_blank"><!--Link to website-->
+                            <button class="BuyNowButton">Buy for {{ item.selling_price }} at {{ getWebsiteName(item.website_url) }}</button><!--Buy now button-->
                         </a>
                     </div>
                     
                 </div>
             </div>
-            <div v-else class="no-results-container">
-                <h1>No item found</h1>
+            <div v-else class="no-results-container"><!--If number of products is 0-->
+                <h1>No item found</h1><!--No item found-->
             </div> 
             <div class="footer">
-                <p>{{siteName}} © {{year}} | All rights reserved</p>
+                <p>{{siteName}} © {{year}} | All rights reserved</p><!--Footer-->
             </div>
         </div>
     </body>
     <script>
-        const app = new Vue({
+        const app = new Vue({//Vue.js
             el: '#app',
             data: {
-                siteName: 'SoleMateFinder',
-                year: new Date().getFullYear(),
+                siteName: 'SoleMate Finder',
+                year: new Date().getFullYear(),//Current year
                 items: [],
                 sku_full: '',
                 variants:[],
                 sku_base: '',
                 searchForm: '',
             },
-            created() {
+            created() {//When page is loaded
                 const urlParams = new URLSearchParams(window.location.search);
                 this.sku_base = urlParams.get('sku_base') || 'fd1165';
                 if(this.sku_base.includes('-')) {
@@ -69,7 +77,7 @@
                     this.sku_base = this.sku_base.split('-')[0];
                 }
             },
-            watch: {
+            watch: {//When sku_full or sku_base changes
                 sku_full: function() {
                     this.fetchData();
                 },
@@ -78,8 +86,9 @@
                 }
             },
             methods: {
-                fetchData: function() {
-                fetch('http://localhost:3000/shoes/' + this.sku_base)
+                fetchData: function() {//Fetch data from API
+                //fetch('http://localhost:3000/shoes/' + this.sku_base)//Fetch variants
+                fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/shoes/' + this.sku_base)//Fetch variants
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -87,51 +96,52 @@
                     return response.json();
                 })
                 .then(data => {
-                    this.variants = data;
-                    var invalidSkuFull = true;
-                    for(var i = 0; i < this.variants.length; i++) {
+                    this.variants = data;//Set variants
+                    var invalidSkuFull = true;//Check if sku_full is valid
+                    for(var i = 0; i < this.variants.length; i++) {//Loop through variants
                         if(this.variants[i].sku_full == this.sku_full) {
-                            invalidSkuFull = false;
+                            invalidSkuFull = false;//sku_full is valid
                             break;
                         }
                     }
-                    if(invalidSkuFull)  this.sku_full = this.variants[0].sku_full;
+                    if(invalidSkuFull)  this.sku_full = this.variants[0].sku_full;//Set sku_full to first variant
                     
 
-                    fetch('http://localhost:3000/shoes/' + this.sku_full)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                    //fetch('http://localhost:3000/shoes/' + this.sku_full)//Fetch items
+                    fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/shoes/' + this.sku_full)//Fetch items
+                    .then(response => {//When response is received
+                        if (!response.ok) {//If response is not ok
+                            throw new Error('Network response was not ok');//Throw error message
                         }
-                        return response.json();
+                        return response.json();//Return response as JSON
                     })
-                    .then(data => {
-                        this.items = data;
+                    .then(data => {//When data is received
+                        this.items = data;//Set items to data
                     })
                     .catch(error => {
-                        console.error('There has been a problem with your fetch operation:', error);
+                        console.error('There has been a problem with your fetch operation:', error);//Catch error
                     });
                 })
                 .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
+                    console.error('There has been a problem with your fetch operation:', error);//Catch error
                 });
                 },
-                getWebsiteName(url) {
-                const domain = new URL(url).hostname;
-                const websiteNames = {
+                getWebsiteName(url) {//Get website name from URL
+                const domain = new URL(url).hostname;//Get hostname from URL
+                const websiteNames = {//Website names
                     'www.unisportstore.com': 'Uni Sports Store',
                     'www.prodirectsport.com': 'Pro Direct Sport',
                     'www.ultrafootball.com': 'Ultra Football',
                     'www.foot-store.com' : 'Foot Store',
                     'www.nike.com': 'Nike'
                 };
-                return websiteNames[domain] || domain;
+                return websiteNames[domain] || domain;//Return website name or domain
                 },
                 setSkuFull(sku_full) {
-                    this.sku_full = sku_full;
+                    this.sku_full = sku_full;//Set sku_full
                 },
                 search: function() {
-                    window.location.href = 'index.html?searchQuery=' + this.searchForm;
+                    window.location.href = 'index.html?searchQuery=' + this.searchForm;//Redirect to index.html with searchQuery
                 }
             }
         });

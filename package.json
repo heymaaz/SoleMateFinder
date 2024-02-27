@@ -1,7 +1,6 @@
 {
   "name": "solematefinder",
   "version": "1.0.0",
-  "description": "",
   "main": "mySQL.js",
   "scripts": {
     "start": "node mySQL.js",
@@ -21,5 +20,9 @@
     "cross-env": "^7.0.3",
     "mocha": "^10.2.0",
     "supertest": "^6.3.3"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "description": ""
 }
