@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>SoleMate Finder</title>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script><!--Vue.js-->
+        <link rel="manifest" href="site.webmanifest"><!--Importing the manifest file -->
         <link rel="icon" href="favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="style.css"><!--CSS-->
     </head>
@@ -70,7 +71,10 @@
                 sku_base: '',
                 searchForm: '',
             },
-            created() {//When page is loaded
+            created() {//When page is loadedcreated() {
+                if ("serviceWorker" in navigator) {
+                    navigator.serviceWorker.register("service-worker.js");
+                }
                 const urlParams = new URLSearchParams(window.location.search);
                 this.sku_base = urlParams.get('sku_base') || 'fd1165';
                 if(this.sku_base.includes('-')) {
