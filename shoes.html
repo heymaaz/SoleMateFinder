@@ -70,6 +70,7 @@
                 variants:[],
                 sku_base: '',
                 searchForm: '',
+                api_url:'https://n5uglm9h7l.execute-api.eu-west-2.amazonaws.com/Production/',
             },
             created() {//When page is loadedcreated() {
                 if ("serviceWorker" in navigator) {
@@ -93,7 +94,8 @@
             methods: {
                 fetchData: function() {//Fetch data from API
                 //fetch('http://localhost:3000/shoes/' + this.sku_base)//Fetch variants
-                fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/shoes/' + this.sku_base)//Fetch variants
+                // fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/shoes/' + this.sku_base)//Fetch variants
+                fetch(this.api_url+'shoes/' + this.sku_base)//Fetch variants
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -113,7 +115,8 @@
                     
 
                     //fetch('http://localhost:3000/shoes/' + this.sku_full)//Fetch items
-                    fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/shoes/' + this.sku_full)//Fetch items
+                    // fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/shoes/' + this.sku_full)//Fetch items
+                    fetch(this.api_url+'shoes/' + this.sku_full)//Fetch items
                     .then(response => {//When response is received
                         if (!response.ok) {//If response is not ok
                             throw new Error('Network response was not ok');//Throw error message

@@ -71,6 +71,7 @@
                 searchQuery: '',
                 searchForm: '',
                 searchCount: 0,//Number of products
+                api_url:'https://n5uglm9h7l.execute-api.eu-west-2.amazonaws.com/Production/'
             },
             computed : {
                 currentPage: function() {
@@ -95,7 +96,8 @@
             methods: {
                 fetchData: function() {//Fetch data from API using searchQuery, offset and limit
                 //fetch('http://localhost:3000/search/?query=' + this.searchQuery+'&offset='+this.offset+'&limit='+this.limit)
-                fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/search/?query=' + this.searchQuery+'&offset='+this.offset+'&limit='+this.limit)
+                // fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/search/?query=' + this.searchQuery+'&offset='+this.offset+'&limit='+this.limit)
+                fetch(this.api_url+'search/?query=' + this.searchQuery+'&offset='+this.offset+'&limit='+this.limit)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -105,7 +107,8 @@
                 .then(data => {
                     this.items = data;
                     //fetch('http://localhost:3000/search/count/?query=' + this.searchQuery)
-                    fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/search/count/?query=' + this.searchQuery)
+                    // fetch('https://solemate-finder-env.eba-49in8fbx.eu-west-2.elasticbeanstalk.com/search/count/?query=' + this.searchQuery)
+                    fetch(this.api_url+'search/count/?query=' + this.searchQuery)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
